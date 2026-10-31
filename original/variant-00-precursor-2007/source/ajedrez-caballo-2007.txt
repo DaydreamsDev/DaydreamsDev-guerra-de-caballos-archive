@@ -1,0 +1,397 @@
+// Author: Juan Camilo Rivera
+/*
+  Name: ajedrez-caballo version 1.2
+  License: MIT
+  Author: Juan Camilo Rivera
+  Date: 08/10/07 16:30
+  Description: programa de ajedrez con un caballo y 4 peones 
+*/
+
+#include<stdio.h>
+#include<conio.h>
+#include<iostream.h>
+#include<stdlib.h>
+#include<time.h>
+
+char caballo=21,peon=6;
+int tablero[8][8];//para almacenar las posiciones en las cuales estan todas las fichas y tambien las posiciones por las que ya pasaron
+int cf,cc,peon1f,peon1c,peon2f,peon2c,peon3f,peon3c,peon4f,peon4c;
+int a=1;//variable en la que se almacena el # de jugada
+void verificacion();//verifica que 2 peones no queden en la misma posicion
+void peoncomido();//revisa si un peon  ha sido comido
+
+void inicializacion(){//inicializacion en o de la matriz
+	int i,j;
+
+	for (i=0;i<8;i++){
+	for (j=0;j<8;j++)
+	{
+		tablero[i][j]=0;
+	}
+	}
+
+}
+void fichasubicacion(){
+	
+srand(time(NULL));// cambia la semilla 
+
+ cf=(rand()%7);
+
+	cf=rand () % 7;//hace aleatoria la fila en la que estrara el caballo
+	cc=rand () % 7;//hace aleatoria la columna en la que estrara el caballo
+	peon1f=rand () % 7;//hace aleatoria la fila en la que estrara el peon1 
+	peon1c=rand () % 7;//hace aleatoria la columna en la que estrara el peon1
+	peon2f=rand () % 7;//hace aleatoria la fila en la que estrara el peon2
+	peon2c=rand () % 7;//hace aleatoria la columna en la que estrara el peon2
+	peon3f=rand () % 7;//hace aleatoria la fila en la que estrara el peon3
+	peon3c=rand () % 7;//hace aleatoria la columna en la que estrara el peon3
+	peon4f=rand () % 7;//hace aleatoria la fila en la que estrara el peon4
+	peon4c=rand () % 7; //hace aleatoria la columna en la que estrara el peon4
+		 
+	verificacion(); //verifica que 2 peones no queden en la misma posicion
+																		
+	tablero[peon1f][peon1c]=-1;//asigana -1 en la posicion en la que estan los peones 
+	tablero[peon2f][peon2c]=-1;
+	tablero[peon3f][peon3c]=-1;
+	tablero[peon4f][peon4c]=-1;
+		
+
+tablero[cf][cc]=a;//asigna el valor de la variable que contiene el # de jugada a la posicion en la que empieza el caballo
+
+}
+
+void impresion(){// funcion para imprimir la matriz y algunos caracteres para mejorar la interfaz
+	int i,j;
+ peoncomido();//asigna un valor diferente a los peones comidos para identificarlos
+	for (i=0;i<8;i++){
+
+	for (j=0;j<8;j++)
+	{
+	 
+									  
+		if(tablero[i][j]!=-1&&tablero[i][j]!=-7)
+		{
+			if (tablero[i][j]!=0)
+			{
+				if(tablero[i][j]<=9)
+				{
+		
+								 
+		cout<<"  Û"<<caballo<<tablero[i][j]<<"Û  ";
+				}
+				else{
+					cout<<"  "<<caballo<<tablero[i][j]<<"Û  ";
+
+				}
+	   
+			}
+			else{
+cout<<"  ÛÛÛ"<<"Û  ";
+
+			}
+
+
+	}
+	else
+	{
+		if(tablero[i][j]==-1){
+			cout<<"  Û"<<peon<<peon<<"Û  ";
+}
+if(tablero[i][j]==-7){
+	 cout<<"  x"<<peon<<peon<<"x  ";
+	 }
+	}
+	}
+	cout<<"\n\n\n\n";
+	}
+
+}
+
+
+void movimientocaballo(){//funcion que realiza el movimiento del caballo
+
+	int opciones,i=0;
+
+
+
+opciones= rand () % 7;// hace aleatorio la opcion que tomara el caballo para su movimiento
+for (i=2;i!=1;i++)// obliga a evaluar todos los casos 
+{
+	
+
+
+	switch (opciones){//casos para los posibles movimientos del caballo
+
+	case 0: //hacia arriba a la izquierda
+
+		cout<<" 0 ,";//muestra si evaluo este caso
+		
+	if (cf-2 >= 0 && cf-2 <= 7 && cc-1 >= 0 && cc-1 <= 7 )//verifica que el caballo no salga del tablero
+	{
+			 if ( tablero[cf-2][cc-1] ==0||tablero[cf-2][cc-1]==-1)//verifica que el caballo no haya estado en esa posicion antes 
+			 {
+i=0;
+
+	cf=cf-2;	
+	cc=cc-1;
+		
+	
+	tablero[cf][cc]=a;
+	cout<<"hacia arriba a la izquierda\n\n";
+	
+break;
+			 }
+	}
+		
+	case 1: //hacia arriba a la derecha 
+	cout<<" 1 ,";//muestra si evaluo este caso
+	
+	if (cf-2>=0&&cf-2<=7&&cc+1>=0&&cc+1<=7)//verifica que el caballo no salga del tablero
+	{
+										   
+	  if(tablero[cf-2][cc+1]==0||tablero[cf-2][cc+1]==-1)//verifica que el caballo no haya estado en esa posicion antes 
+	  {
+		i=0;
+	cf=cf-2;
+	cc=cc+1;
+	
+
+	tablero[cf][cc]=a;cout<<"hacia arriba a la derecha \n\n";
+break;
+	  }
+	 
+	 }
+
+
+	case 2: //hacia abajo a la izquierda 
+cout<<" 2 ,";//muestra si evaluo este caso
+
+	if (cf+2>=0&&cf+2<=7&&cc-1>=0&&cc-1<=7)//verifica que el caballo no salga del tablero
+	{
+	 if (tablero[cf+2][cc-1]==0||tablero[cf+2][cc-1]==-1)//verifica que el caballo no haya estado en esa posicion antes 
+	 {
+		i=0;
+	cf=cf+2;
+	cc=cc-1;
+	
+
+	tablero[cf][cc]=a; cout<<"hacia abajo a la izquierda \n\n";
+break;
+	}
+	}
+	
+
+
+	case 3: //hacia abajo a la derecha 
+	cout<<" 3 ,";//muestra si evaluo este caso
+	
+	if (cf+2>=0&&cf+2<=7&&cc+1>=0&&cc+1<=7)//verifica que el caballo no salga del tablero
+	{
+	if(tablero[cf+2][cc+1]==0||tablero[cf+2][cc+1]==-1)//verifica que el caballo no haya estado en esa posicion antes 
+	{
+		i=0;
+	cf=cf+2;
+	cc=cc+1;
+	
+
+	tablero[cf][cc]=a; cout<<"hacia abajo a la derecha \n\n";
+break;	
+}
+	}
+	
+
+
+	case 4: //hacia la derecha arriba
+	cout<<" 4 ,";//muestra si evaluo este caso
+	
+	if (cf-1>=0&&cf-1<=7&&cc+2>=0&&cc+2<=7)//verifica que el caballo no salga del tablero
+	{
+ if (tablero[cf-1][cc+2]==0||tablero[cf-1][cc+2]==-1)//verifica que el caballo no haya estado en esa posicion antes 
+ {
+		i=0;
+	cf=cf-1;
+	cc=cc+2;
+		
+
+	tablero[cf][cc]=a; cout<<"hacia la derecha arriba\n\n";
+break;	
+}
+	}
+	
+
+
+	case 5: //hacia la derecha abajo
+	cout<<" 5 ,";//muestra si evaluo este caso
+	
+	if (cf+1>=0&&cf+1<=7&&cc+2>=0&&cc+2<=7)//verifica que el caballo no salga del tablero
+	{
+ if (tablero[cf+1][cc+2]==0||tablero[cf+1][cc+2]==-1)//verifica que el caballo no haya estado en esa posicion antes 
+ {
+		i=0;
+	cf=cf+1;
+	cc=cc+2;
+		
+
+	tablero[cf][cc]=a; cout<<"hacia la derecha abajo\n\n";
+	break;
+}
+}	
+	
+	
+
+	opciones = 6;
+
+	case 6: //hacia la izquierda arriba 
+	cout<<" 6 ,";//muestra si evaluo este caso
+
+	if (cf-1>=0&&cf-1<=7&&cc-2>=0&&cc-2<=7)//verifica que el caballo no salga del tablero
+	{
+ if (tablero[cf-1][cc-2]==0||tablero[cf-1][cc-2]==-1)//verifica que el caballo no haya estado en esa posicion antes 
+ {
+		i=0;
+	cf=cf-1;
+	cc=cc-2;
+	
+	
+	tablero[cf][cc]=a;	  cout<<"hacia la izquierda arriba\n\n";
+	break;
+}
+	}
+	 
+
+	
+
+	case 7: //hacia la izquierda abajo 
+	cout<<" 7 ,";//muestra si evaluo este caso
+	
+	if (cf+1>=0&&cf+1<=7&&cc-2>=0&&cc-2<=7)//verifica que el caballo no salga del tablero
+	{
+ if (tablero[cf+1][cc-2]==0||tablero[cf+1][cc-2]==-1)//verifica que el caballo no haya estado en esa posicion antes 
+ {
+		i=0;
+	cf=cf+1;
+	cc=cc-2;
+	
+
+	tablero[cf][cc]=a; cout<<"hacia la izquierda abajo\n\n";
+	break;
+}
+	}
+	 
+
+	opciones = 0;
+
+
+	
+	}
+	if(i==3){//condicional para salir del ciclo si despues de evaluar todos los casos no es posible hacer nada
+	cout<<"\n\n\nno hay mas movimientos posibles\n\n\n"; 
+		a=0;
+		i=0;
+	}
+}
+}
+
+void pruebatriunfo(){//procedimiento que revisa cuando la maquina se come todos los peones 
+			  if( tablero[peon1f][peon1c]!=-1&&tablero[peon2f][peon2c]!=-1
+			  &&tablero[peon3f][peon3c]!=-1&&tablero[peon4f][peon4c]!=-1 )
+			  {
+			  cout<<"\n\nTRIUNFO PARA LA MIQUINA :D\n\n";
+			  a=0;
+																	   
+			  }																	
+				}
+
+
+
+void peoncomido(){//asigna un valor especial a los peones que han sido comidos 
+		if(tablero[peon1f][peon1c]!=-1&&tablero[peon1f][peon1c]!=0)
+	 {
+	 tablero[peon1f][peon1c]=-7;
+	 }
+	 if (tablero[peon2f][peon2c]!=-1&&tablero[peon2f][peon2c]!=0)
+	 {
+		  tablero[peon2f][peon2c]=-7;						
+								 }
+	  if (tablero[peon3f][peon3c]!=-1&&tablero[peon3f][peon3c]!=0)
+	 {
+		  tablero[peon3f][peon3c]=-7;						
+								 } 
+		  if (tablero[peon4f][peon4c]!=-1&&tablero[peon4f][peon4c]!=0)
+	 {
+		  tablero[peon4f][peon4c]=-7;						
+								 }							  
+}
+
+void verificacion(){//verifica que 2 peones no queden en la misma posicion
+	int i;
+	while(i!=3){
+				i=0;
+if((peon1f==peon2f&&peon1c==peon2c)||(peon1f==peon3f&&peon1c==peon3c)||(peon1f==peon4f&&peon1c==peon4c))
+{
+	peon1f=rand () % 7;
+	peon1c=rand () % 7;
+				 
+}
+else{
+	 i++;
+	 }
+if((peon2f==peon3f&&peon2c==peon3c)||(peon2f==peon4f&&peon2c==peon4c)){
+	peon2f=rand () % 7;
+	peon2c=rand () % 7;
+																	   }
+	else{
+		 i++;
+		 }																	 
+if(peon3f==peon4f&&peon3c==peon4c)
+{
+	peon3f=rand () % 7;
+	peon3c=rand () % 7;
+	peon4f=rand () % 7;
+	peon4c=rand () % 7; 							
+								  }
+	else{
+		 i++;
+		 }								  
+								  }
+}
+									 
+int main (){//procedimiento principal 
+char caracter;
+a=1;//variable que almacena el # de jugada
+	
+	system("color 1f");//para cambiar el color de la consola 
+	inicializacion();//para iniciar la matriz en 0
+	fichasubicacion();//para ubicar los peones y el caballo al principio del juego
+
+impresion();//imprime el tablero 
+cout<<"\n\nesta es la jugada # "<<a<<"\n\n";//imprime el numero de jugada 
+	cout<<"\n";
+cin>>caracter;//permite que se vea el tablero
+
+	cout<<"\n";
+system("cls");//borra los tableros anteriores 
+	while (a!=0)//hace que el juego se ejecute hasta que la maquina gane o el caballo quede encerrado
+	{
+		
+		
+		cout<<"\n\nubicacion actual del caballo :"<<"fila "<<cf;//muestra la ubcicacion actual del caballo
+		cout<<", columna "<<cc<<"\n\n";
+		pruebatriunfo();//revisa si la maquina gana
+			
+				
+		if (a!=0)//incrementa el turno siempre que la maquina no haya gandao o que el caballo njo este encerrado
+		{
+		a++;
+		}
+		cout<<"evaluo los casos:";
+		movimientocaballo();//realiza el movimiento del caballo y muestra los casos que evaluo
+		
+		impresion();//imprime el tablero
+		cout<<"\n\nesta es la jugada # "<<a<<"\n\n";// muestra el numero de jugada 
+		cout<<"\n";
+		cin>>caracter;//permite que se vea el tablero
+		cout<<"\n";
+	system("cls");//borra los tableros anteriores 
+	}
+}
